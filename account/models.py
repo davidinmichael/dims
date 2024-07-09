@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils.translation import gettext as _
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 from django.db import models
@@ -29,28 +29,31 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class Dataset(AbstractUser):
-    ROLE_CHOICES = [
-        ('student', 'Student'),
-        ('admin', 'Admin'),
-    ]
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    
+    first_name = models.CharField(max_length=100, default='Unknown')  
+    last_name = models.CharField(max_length=100, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     image = models.ImageField(upload_to='users/', null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    state_of_origin = models.CharField(max_length=50, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    nationality = models.CharField(max_length=50, null=True, blank=True)
+    matric_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    marital_status = models.CharField(max_length=50, null=True, blank=True)
+    academic_position = models.CharField(max_length=50, null=True, blank=True)
+    religion = models.CharField(max_length=50, null=True, blank=True)
+    is_student = models.BooleanField(default=False)
+    is_lecturer = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    
+    def clean(self):
+        super().clean()
+        if sum([self.is_student, self.is_admin, self.is_lecturer]) > 1:
+            raise ValidationError("A user can only be a student, admin, or lecturer, not more than one.")
 
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_user_set',
-        blank=True,
-        help_text=_('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
-        verbose_name=_('groups'),
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_user_set',
-        blank=True,
-        help_text=_('Specific permissions for this user.'),
-        verbose_name=_('user permissions'),
-    )
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     objects = CustomUserManager()
 
