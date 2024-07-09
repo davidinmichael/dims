@@ -47,11 +47,6 @@ class Dataset(AbstractUser):
     religion = models.CharField(max_length=50, null=True, blank=True)
     nationality = models.CharField(max_length=50, null=True, blank=True)
 
-    # Sign In (Usually handled by Django auth system)
-    sign_in_email = models.EmailField(null=True, blank=True)
-    sign_in_password = models.CharField(max_length=128, null=True, blank=True)
-    sign_in_matric_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
-
     # Courses Dataset
     number_of_courses = models.IntegerField(null=True, blank=True)
     current_semester_courses = models.JSONField(null=True, blank=True)  # Store course codes
@@ -59,8 +54,6 @@ class Dataset(AbstractUser):
     outstanding_courses = models.JSONField(null=True, blank=True)  # Store course codes
 
     # Course table
-    lecturer_name = models.CharField(max_length=100, null=True, blank=True)
-    lecturer_email = models.EmailField(null=True, blank=True)
     availability_status = models.BooleanField(default=True, null=True, blank=True)
     course_title = models.CharField(max_length=200, null=True, blank=True)
     course_unit = models.IntegerField(null=True, blank=True)
@@ -95,16 +88,12 @@ class Dataset(AbstractUser):
     event_date_time = models.DateTimeField(null=True, blank=True)
 
     # Contact page
-    contact_first_name = models.CharField(max_length=100, null=True, blank=True)
-    contact_last_name = models.CharField(max_length=100, null=True, blank=True)
-    contact_email = models.EmailField(null=True, blank=True)
+    
     contact_phone_number = models.CharField(max_length=20, null=True, blank=True)
     contact_message = models.TextField(null=True, blank=True)
 
     # Address & WhatsApp
     office_school_address = models.CharField(max_length=200, null=True, blank=True)
-    whatsapp_dept_number = models.CharField(max_length=20, null=True, blank=True)
-    whatsapp_number = models.CharField(max_length=20, null=True, blank=True)
 
     # Sign In (Usually handled by Django auth system)
     sign_in_email = models.EmailField(null=True, blank=True)
@@ -130,7 +119,7 @@ class Dataset(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
-    
+
     def __str__(self):
         return self.username
 
