@@ -67,5 +67,5 @@ class Account(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name} | {self.email}"
     
-    def get_full_name(self) -> str:
-        return super().get_full_name()
+    def user_full_name(self):
+        return f"{self.first_name} {self.last_name}"
