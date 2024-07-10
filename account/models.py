@@ -52,13 +52,14 @@ class Account(AbstractUser):
     # Student Fields
     matric_number = models.CharField(max_length=20, null=True, blank=True)
     level_year = models.CharField(max_length=20, null=True, blank=True)
-    username = models.CharField(max_length=20, null=True, blank=True)
+    current_cgpa = models.CharField(max_length=10, null=True, blank=True)
 
     # Lecturer Fields
     lecturer_title = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
     active_status = models.BooleanField(default=False)
     
+    username = models.CharField(max_length=20, null=True, blank=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
