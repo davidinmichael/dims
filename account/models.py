@@ -30,9 +30,6 @@ class AccountManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
-
-
-
 class Account(AbstractUser):
     # Common Fields
     first_name = models.CharField(max_length=20, null=True, blank=True)
