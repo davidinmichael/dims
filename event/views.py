@@ -11,8 +11,8 @@ class EventListView(APIView):
     API view to retrieve a list of all events.
     """
     def get(self, request):
-        event = Event.objects.all()
-        event_list = list(event.values())
+        event = Event.objects.filter(user=request.user)
+        event_list = [{'id': event.id, 'title': event.title} for event in events]
         return JsonResponse({'event': event_list})
 
 class EventDetailView(APIView):
