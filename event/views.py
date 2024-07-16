@@ -37,7 +37,6 @@ class EventCreateView(LoginRequiredMixin, APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request):
-        # Assuming CSRF protection is handled by Django middleware
         data = json.loads(request.body)
         event = Event.objects.create(
             title=data['title'],
