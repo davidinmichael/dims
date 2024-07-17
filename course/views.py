@@ -3,12 +3,12 @@ from rest_framework.response import Response
 from .serializers import CourseSerializer
 from .models import *
 from rest_framework  import status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .permissions import WriteOrRead
 # Create your views here.
 
 
 class CourseListCreate(APIView):
-    premission_classes = [IsAuthenticatedOrReadOnly]
+    premission_classes = [WriteOrRead]
 
     def get(self, request):
         course = Courses.objects.all()
@@ -24,7 +24,7 @@ class CourseListCreate(APIView):
     
 
 class CourseDetail(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [WriteOrRead]
 
     def get_object(self, pk):
         try:
