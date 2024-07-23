@@ -30,6 +30,9 @@ class AccountManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+    
+
+    
 class Account(AbstractUser):
     # Common Fields
     first_name = models.CharField(max_length=20, null=True, blank=True)
@@ -41,17 +44,22 @@ class Account(AbstractUser):
     phone_number = models.CharField(max_length=20, null=True, blank=True, default="")
     state = models.CharField(max_length=20, blank=True, null=True, default="")
     profile_picture = models.ImageField(upload_to="profile_images/", default="profile_images/default-profile-image.png", blank=True, null=True)
-    country = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
-    is_admin_user = models.BooleanField(default=False)
+    nationality = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
     password = models.CharField(max_length=30, null=False, blank=True, default="")
     marital_status = models.CharField(max_length=30, null=False, blank=True, default="")
+
+    # Admin Fields
+    is_admin_user = models.BooleanField(default=False)
 
     # Student Fields
     matric_number = models.CharField(max_length=20, null=True, blank=True)
     level_year = models.CharField(max_length=20, null=True, blank=True)
     current_cgpa = models.CharField(max_length=10, null=True, blank=True)
+    is_student = models.BooleanField(default=False)
+
 
     # Lecturer Fields
+    is_lecturer = models.BooleanField(default=False)
     lecturer_title = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
     active_status = models.BooleanField(default=False)
