@@ -46,7 +46,7 @@ class Account(AbstractUser):
     profile_picture = models.ImageField(upload_to="profile_images/", default="profile_images/default-profile-image.png", blank=True, null=True)
     nationality = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
     password = models.CharField(max_length=30, null=False, blank=True, default="")
-    marital_status = models.CharField(max_length=30, null=False, blank=True, default="")
+    marital_status = models.CharField(max_length=20, null=False, blank=True, default="")
 
     # Admin Fields
     is_admin_user = models.BooleanField(default=False)
@@ -60,9 +60,9 @@ class Account(AbstractUser):
 
     # Lecturer Fields
     is_lecturer = models.BooleanField(default=False)
-    lecturer_title = models.CharField(max_length=20, null=True, blank=True)
+    lecturer_rank = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
-    active_status = models.BooleanField(default=False)
+    active_status = models.CharField(max_length=20, choices=Availability.choices, default=Availability.UNAVAILABLE, null=True, blank=True)
     
     username = models.CharField(max_length=20, null=True, blank=True)
     USERNAME_FIELD = "email"
