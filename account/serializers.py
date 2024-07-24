@@ -32,16 +32,23 @@ class AccountSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
         }
 
-
-class StudentLoginSerializer(serializers.Serializer):
-    matric_number = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-
-# Student Signup Serializer
-class StudentSignupSerializer(serializers.ModelSerializer):
-    class Meta(AccountSerializer):
+# Student Serializer
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
         model = Account
-        fields = AccountSerializer.Meta.fields + [
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "country",
+            "password",
+            "marital_status",
             "matric_number",
             "level_year",
             "current_cgpa"
@@ -50,16 +57,24 @@ class StudentSignupSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
         }
 
-# Lecturer Login Serializer
-class LecturerLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
 
-# Lecturer Signup Serializer
+# Lecturer Serializer
 class LecturerSignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = AccountSerializer.Meta.fields + [
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "country",
+            "password",
+            "marital_status",
             "lecturer_title",
             "academic_role"
         ]
@@ -67,19 +82,25 @@ class LecturerSignupSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
         }
 
-# Admin Login Serializer
-class AdminLoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-
-# Admin Signup Serializer
-class AdminSignupSerializer(serializers.ModelSerializer):
+# Admin Serializer
+class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = AccountSerializer.Meta.fields + [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "country",
+            "password",
+            "marital_status",
             "is_admin_user"
         ]
         extra_kwargs = {
             "password": {"write_only": True},
         }
-# something
