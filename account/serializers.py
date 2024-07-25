@@ -59,7 +59,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 # Lecturer Serializer
-class LecturerSignupSerializer(serializers.ModelSerializer):
+class LecturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = [
