@@ -17,6 +17,12 @@ class CreateAccount(APIView):
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             user = serializer.save()
+            
+            # Handling nested SocialLinks
+            social_links_data = request.data.get('social_links', [])
+            for social_link_data in social_links_data:
+                SocialLink.objects.create(user=user, **social_link_data)
+                
             data["message"] = "Account created successfully"
             data["user_info"] = AccountSerializer(user).data
             data["token"] = get_auth_token(user)
