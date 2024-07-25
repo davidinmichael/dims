@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
 
@@ -12,19 +12,19 @@ def get_auth_token(user):
     }
 
 
-def send_email(user_email, template, subject):
+def send_email(user_email, subject, template):
     subject = subject
     from_email = settings.EMAIL_HOST_USER
     to_email = [user_email]
 
     email = EmailMultiAlternatives(
         subject = subject,
-        body = "This is the body of the email",
+        body = "Email Content",
         from_email = from_email,
         to=to_email,
     )
 
-    email.content_subtype = "text/html"
+    email.content_subtype = "html"
     email.attach_alternative(template, "text/html")
 
     try:

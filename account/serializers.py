@@ -7,8 +7,11 @@ class SocialLinkSerializer(serializers.ModelSerializer):
         model = SocialLink
         fields = ['id', 'platform', 'url']
 
+
+
 class AccountSerializer(serializers.ModelSerializer):
-    social_links = SocialLinkSerializer()
+    social_links = SocialLinkSerializer(required=False, many=True)
+
     class Meta:
         model = Account
         fields = [
@@ -30,15 +33,28 @@ class AccountSerializer(serializers.ModelSerializer):
             "current_cgpa",
             "lecturer_title",
             "academic_role",
-            "active_status"
+            "active_status",
+            "profile_url",
+            "social_links",
         ]
+
         extra_kwargs = {
             "id": {"read_only": True},
             "password": {"write_only": True},
         }
+    
+    def create(self, validated_data):
+        social_links = validated_data.pop("social_links", [])
+        user = Account.objects.create(**validated_data)
+        for social_link in social_links:
+            SocialLink.objects.create(user=user, **social_link)
+        return user
+    
 
 # Student Serializer
 class StudentSerializer(serializers.ModelSerializer):
+    social_links = SocialLinkSerializer(required=False, many=True)
+
     class Meta:
         model = Account
         fields = [
@@ -56,8 +72,12 @@ class StudentSerializer(serializers.ModelSerializer):
             "marital_status",
             "matric_number",
             "level_year",
-            "current_cgpa"
+            "current_cgpa",
+            "profile_url",
+            "is_student",
+            "social_links",
         ]
+
         extra_kwargs = {
             "password": {"write_only": True},
         }
@@ -65,6 +85,8 @@ class StudentSerializer(serializers.ModelSerializer):
 
 # Lecturer Serializer
 class LecturerSerializer(serializers.ModelSerializer):
+    social_links = SocialLinkSerializer(required=False, many=True)
+
     class Meta:
         model = Account
         fields = [
@@ -81,7 +103,11 @@ class LecturerSerializer(serializers.ModelSerializer):
             "password",
             "marital_status",
             "lecturer_rank",
-            "academic_role"
+            "academic_role",
+            "active_status",
+            "is_lecturer",
+            "profile_url",
+            "social_links",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -89,9 +115,11 @@ class LecturerSerializer(serializers.ModelSerializer):
 
 # Admin Serializer
 class AdminSerializer(serializers.ModelSerializer):
+    social_links = SocialLinkSerializer(required=False, many=True)
+
     class Meta:
         model = Account
-        fields = AccountSerializer.Meta.fields + [
+        fields = [
             "first_name",
             "last_name",
             "email",
@@ -104,7 +132,9 @@ class AdminSerializer(serializers.ModelSerializer):
             "nationality",
             "password",
             "marital_status",
-            "is_admin_user"
+            "is_admin_user",
+            "profile_url",
+            "social_links",
         ]
         extra_kwargs = {
             "password": {"write_only": True},

@@ -45,6 +45,7 @@ class Account(AbstractUser):
     nationality = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
     password = models.CharField(max_length=30, null=False, blank=True, default="")
     marital_status = models.CharField(max_length=20, null=False, blank=True, default="")
+    profile_url = models.CharField(max_length=30, null=True, blank=True)
 
     # Admin Fields
     is_admin_user = models.BooleanField(default=False)
@@ -75,6 +76,13 @@ class Account(AbstractUser):
     def user_full_name(self):
         return f"{self.first_name} {self.last_name}"
     
+    def save(self, *args, **kwargs):
+        if not self.profile_url:
+            self.profile_url = f"account/me/{self.id}"
+        return super().save(*args, **kwargs)
+    
+
+
 class SocialLink(models.Model):
     user = models.ForeignKey(Account, related_name='social_links', on_delete=models.CASCADE)
     platform = models.CharField(max_length=50)
