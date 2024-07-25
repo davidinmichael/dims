@@ -2,6 +2,10 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from .models import *
 
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialLink
+        fields = ['id', 'platform', 'url']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
