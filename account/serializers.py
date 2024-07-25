@@ -8,6 +8,7 @@ class SocialLinkSerializer(serializers.ModelSerializer):
         fields = ['id', 'platform', 'url']
 
 class AccountSerializer(serializers.ModelSerializer):
+    social_links = SocialLinkSerializer()
     class Meta:
         model = Account
         fields = [
