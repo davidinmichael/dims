@@ -31,8 +31,6 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-
-    
 class Account(AbstractUser):
     # Common Fields
     first_name = models.CharField(max_length=20, null=True, blank=True)
@@ -76,3 +74,11 @@ class Account(AbstractUser):
     
     def user_full_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+class SocialLink(models.Model):
+    user = models.ForeignKey(Account, related_name='social_links', on_delete=models.CASCADE)
+    platform = models.CharField(max_length=50)
+    url = models.URLField()
+    
+    def __str__(self):
+        return f'{self.platform}: {self.url}'
