@@ -8,6 +8,7 @@ class SocialLinkSerializer(serializers.ModelSerializer):
         fields = ['id', 'platform', 'url']
 
 class AccountSerializer(serializers.ModelSerializer):
+    social_links = SocialLinkSerializer()
     class Meta:
         model = Account
         fields = [
@@ -20,7 +21,7 @@ class AccountSerializer(serializers.ModelSerializer):
             "phone_number",
             "state",
             "profile_picture",
-            "country",
+            "nationality",
             "is_admin_user",
             "password",
             "marital_status",
@@ -36,6 +37,75 @@ class AccountSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
         }
 
+# Student Serializer
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "nationality",
+            "password",
+            "marital_status",
+            "matric_number",
+            "level_year",
+            "current_cgpa"
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
-class StudentLoginSerializer(serializers.Serializer):
-    matric_number = serializers.CharField()
+
+# Lecturer Serializer
+class LecturerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "nationality",
+            "password",
+            "marital_status",
+            "lecturer_rank",
+            "academic_role"
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
+
+# Admin Serializer
+class AdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = AccountSerializer.Meta.fields + [
+            "first_name",
+            "last_name",
+            "email",
+            "date_of_birth",
+            "gender",
+            "religion",
+            "phone_number",
+            "state",
+            "profile_picture",
+            "nationality",
+            "password",
+            "marital_status",
+            "is_admin_user"
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
