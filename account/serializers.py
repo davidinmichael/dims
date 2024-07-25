@@ -21,7 +21,7 @@ class AccountSerializer(serializers.ModelSerializer):
             "phone_number",
             "state",
             "profile_picture",
-            "country",
+            "nationality",
             "is_admin_user",
             "password",
             "marital_status",
@@ -51,7 +51,7 @@ class StudentSerializer(serializers.ModelSerializer):
             "phone_number",
             "state",
             "profile_picture",
-            "country",
+            "nationality",
             "password",
             "marital_status",
             "matric_number",
@@ -77,10 +77,10 @@ class LecturerSerializer(serializers.ModelSerializer):
             "phone_number",
             "state",
             "profile_picture",
-            "country",
+            "nationality",
             "password",
             "marital_status",
-            "lecturer_title",
+            "lecturer_rank",
             "academic_role"
         ]
         extra_kwargs = {
@@ -101,7 +101,7 @@ class AdminSerializer(serializers.ModelSerializer):
             "phone_number",
             "state",
             "profile_picture",
-            "country",
+            "nationality",
             "password",
             "marital_status",
             "is_admin_user"
