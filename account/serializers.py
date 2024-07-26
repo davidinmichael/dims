@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from .models import *
+from django.contrib.auth import authenticate
 
 class SocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -139,3 +140,17 @@ class AdminSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
         }
+
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(email=data['email'], password=data['password'])
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Invalid credentials")
+    
+    
