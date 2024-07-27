@@ -7,6 +7,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from .serializers import ForgotPasswordSerializer
+
 
 from .utils import *
 from .models import *
@@ -52,23 +54,24 @@ class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        matric_number = request.data.get('matric_number')
-        email = request.data.get('email')
-        if not matric_number or not email:
-            return Response({"error": "Matric number and email are required"}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            user = Account.objects.get(matric_number=matric_number, email=email)
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            # Assume `password_reset_email.html` is your email template
-            context = {
-                'user': user,
-                'uid': uid,
-                'token': token
-            }
-            subject = 'Password Reset Requested'
-            message = render_to_string('password_reset_email.html', context)
-            send_mail(subject, message, 'from@example.com', [user.email], fail_silently=False)
-            return Response({"message": "Password reset email sent"}, status=status.HTTP_200_OK)
-        except Account.DoesNotExist:
-            return Response({"error": "User with this matric number and email does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ForgotPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            matric_number = serializer.validated_data['matric_number']
+            email = serializer.validated_data['email']
+            
+            try:
+                user = Account.objects.get(email=email, matric_number=matric_number)
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                context = {
+                    'user': user,
+                    'uid': uid,
+                    'token': token
+                }
+                subject = 'Password Reset Requested'
+                message = render_to_string('password_reset_email.html', context)
+                send_mail(subject, message, 'from@example.com', [user.email], fail_silently=False)
+                return Response({"message": "Password reset email sent"}, status=status.HTTP_200_OK)
+            except Account.DoesNotExist:
+                return Response({"error": "User with this email and matric number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

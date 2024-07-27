@@ -154,3 +154,6 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError("Invalid credentials")
     
     
+class ForgotPasswordSerializer(serializers.Serializer):
+    matric_number = serializers.CharField()
+    email = serializers.EmailField() 
