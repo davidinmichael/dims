@@ -61,7 +61,7 @@ class InitiateForgotPassword(APIView):
 
     def post(self, request):
         frontend_url = os.getenv("FRONTEND_BASE_URL")
-        email = request.POST.get("email")
+        email = request.data.get("email")
         try:
             user = Account.objects.get(email=email)
         except Account.DoesNotExist:
