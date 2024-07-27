@@ -144,3 +144,14 @@ class AdminSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    otp_token = serializers.CharField()
+    password = serializers.CharField()
+    confirm_password = serializers.CharField()
+
+    def validate(self, data):
+        if data["password"] != data["confirm_password"]:
+            raise serializers.ValidationError("Passwords do not match")
+        return data

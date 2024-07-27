@@ -2,6 +2,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
+import random
+import string
+
+
+def generate_verification_token(*, length=4):
+    return "".join(random.choices('123456789', k=length))
+
 
 def get_auth_token(user):
     refresh = RefreshToken.for_user(user)

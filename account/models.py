@@ -46,6 +46,7 @@ class Account(AbstractUser):
     password = models.CharField(max_length=30, null=False, blank=True, default="")
     marital_status = models.CharField(max_length=20, null=False, blank=True, default="")
     profile_url = models.CharField(max_length=30, null=True, blank=True)
+    otp_token = models.CharField(max_length=5, null=True, blank=True)
 
     # Admin Fields
     is_admin_user = models.BooleanField(default=False)
