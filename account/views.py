@@ -52,11 +52,12 @@ class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        matric_number = request.data.get('matric_number')
         email = request.data.get('email')
-        if not email:
-            return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not matric_number or not email:
+            return Response({"error": "Matric number and email are required"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            user = Account.objects.get(email=email)
+            user = Account.objects.get(matric_number=matric_number, email=email)
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             # Assume `password_reset_email.html` is your email template
@@ -70,4 +71,4 @@ class ForgotPasswordView(APIView):
             send_mail(subject, message, 'from@example.com', [user.email], fail_silently=False)
             return Response({"message": "Password reset email sent"}, status=status.HTTP_200_OK)
         except Account.DoesNotExist:
-            return Response({"error": "User with this email does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "User with this matric number and email does not exist"}, status=status.HTTP_400_BAD_REQUEST)
