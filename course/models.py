@@ -6,9 +6,7 @@ from core.choices import *
 
 
 class Courses(models.Model):
-    lecturer_name = models.CharField(max_length=20, null=True, blank=True)
-    lecturer_email = models.EmailField(max_length=20, null=True, blank=True)
-    lecturer_availability = models.CharField(max_length=15, choices=Availability.choices, null=True, blank=True, default=Availability.AVAILABLE)
+    lecturer = models.ForeignKey(Account, related_name="lecturer_courses", on_delete=models.SET_NULL, null=True, blank=True)
 
     lecture_date = models.DateField(null=True, blank=True) # "yyyy-mm-dd"
     lecture_time = models.TimeField(null=True, blank=True) # "HH:MM"
