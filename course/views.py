@@ -3,51 +3,59 @@ from rest_framework.response import Response
 from .serializers import CourseSerializer
 from .models import *
 from rest_framework  import status
-from .permissions import WriteOrRead
-# Create your views here.
+from .permissions import *
+
 
 
 class CourseListCreate(APIView):
-    premission_classes = [WriteOrRead]
+    premission_classes = [CourseWriteOrRead]
 
     def get(self, request):
-        course = Courses.objects.all()
-        if not course.exists():
-            return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
-        serializer = CourseSerializer(course, many=True)
-        return Response(serializer.data)
+        courses = Courses.objects.all()
+        if courses:
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         serializer = CourseSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            course = serializer.save(created_by=request.user)
+            course_serializer = CourseSerializer(course)
+            return Response(course_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+
 class CourseDetail(APIView):
-    permission_classes = [WriteOrRead]
+    permission_classes = [CourseWriteOrRead]
 
     def get_object(self, pk):
         try:
             return Courses.objects.get(pk=pk)
         except Courses.DoesNotExist:
-            raise Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
+            return None
         
     def get(self, request, pk):
         course = self.get_object(pk)
-        serializer = CourseSerializer(course)
-        return Response(serializer.data)
+        if course:
+            serializer = CourseSerializer(course)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk):
         course = self.get_object(pk)
-        serializer = CourseSerializer(course, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if course:
+            serializer = CourseSerializer(course, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
     
     def delete(self, request, pk):
         course = self.get_object(pk)
-        course.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if course:
+            course.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)

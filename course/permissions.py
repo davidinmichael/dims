@@ -1,7 +1,7 @@
 from rest_framework import permissions
 from account.models import *
 
-class WriteOrRead(permissions.BasePermission):
+class CourseWriteOrRead(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
