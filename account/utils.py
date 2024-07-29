@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from course.models import Courses
 
 import random
 import string
@@ -40,3 +41,32 @@ def send_email(user_email, subject, template):
         print("Email sending failed", {e})
         return "Couldn't connect, try again"
     return None
+
+
+def student_courses(student):
+    current_level = int(student.level_year)
+    total_courses = Courses.objects.filter(level__lte=current_level)
+    current_semester = student.current_semester
+    current_semester_courses = total_courses.filter(semester=current_semester)
+    
+    completed_courses = student.completed_courses.all()
+    outstanding_courses = total_courses.exclude(id__in=completed_courses.values_list('id', flat=True))
+
+    response = {
+        "current_level": current_level,
+        "current_semester": current_semester,
+        "total_courses": {
+            "count": total_courses.count(),
+            "courses": list(total_courses.values('course_title', 'course_code', 'lecture_date', 'lecture_time'))
+        },
+        "current_semester_courses": {
+            "count": current_semester_courses.count(),
+            "courses": list(current_semester_courses.values('course_title', 'course_code', 'lecture_date', 'lecture_time'))
+        },
+        "outstanding_courses": {
+            "count": outstanding_courses.count(),
+            "courses": list(outstanding_courses.values('course_title', 'course_code', 'lecture_date', 'lecture_time'))
+        }
+    }
+
+    return response
