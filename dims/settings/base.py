@@ -49,13 +49,10 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Installed apps
-    "rest_framework",
     "account",
-<<<<<<< HEAD:dims/settings.py
     "course",
-=======
     "event",
->>>>>>> main:dims/settings/base.py
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -142,13 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "account.Account"
 
-<<<<<<< HEAD:dims/settings.py
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
-=======
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -165,4 +155,3 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=14),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
->>>>>>> main:dims/settings/base.py

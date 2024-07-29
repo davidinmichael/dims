@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, Permission
-from .choices import *
 from rest_framework.response import Response
+
+from course.choices import StudentLevel
+
+from .choices import *
+from core.choices import *
+
 
 class AccountManager(BaseUserManager):
 
@@ -53,7 +58,7 @@ class Account(AbstractUser):
 
     # Student Fields
     matric_number = models.CharField(max_length=20, null=True, blank=True)
-    level_year = models.CharField(max_length=20, null=True, blank=True)
+    level_year = models.CharField(choices=StudentLevel.choices, max_length=20, null=True, blank=True)
     current_semester = models.CharField(max_length=10, null=True, blank=True)
     current_cgpa = models.CharField(max_length=10, null=True, blank=True)
     is_student = models.BooleanField(default=False)
@@ -63,7 +68,7 @@ class Account(AbstractUser):
     is_lecturer = models.BooleanField(default=False)
     lecturer_rank = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
-    active_status = models.CharField(max_length=20, choices=Availability.choices, default=Availability.UNAVAILABLE, null=True, blank=True)
+    lecturer_availability = models.CharField(max_length=20, choices=Availability.choices, default=Availability.AVAILABLE, null=True, blank=True)
     
     username = models.CharField(max_length=20, null=True, blank=True)
     USERNAME_FIELD = "email"

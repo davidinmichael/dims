@@ -6,10 +6,6 @@ class Gender(models.TextChoices):
     MALE = "male", _("Male")
     OTHER = "other", _("Other")
 
-class Availability(models.TextChoices):
-    AVAILABLE = "available", _("Available")
-    UNAVAILABLE = "unavailable", _("Unavailable")
-
 
 class Qualification(models.TextChoices):
     SSCE = "ssce", _("SSCE")
