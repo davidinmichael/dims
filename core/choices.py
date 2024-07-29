@@ -7,7 +7,7 @@ class Availability(models.TextChoices):
     UNAVAILABLE = "unavailable", _("Unavailable")
 
 
-class StudentLevel(models.TextChoices):
+class StudentLevel(models.IntegerChoices):
     LEVEL_ONE = 1, _("Level One")
     LEVEL_TWO = 2, _("Level Two")
     LEVEL_THREE = 3, _("Level Three")
