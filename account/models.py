@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Group, Permission
 from rest_framework.response import Response
 
-from course.choices import StudentLevel
-
 from .choices import *
 from core.choices import *
 
