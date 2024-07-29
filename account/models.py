@@ -30,9 +30,7 @@ class AccountManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
-
-
-
+    
 class Account(AbstractUser):
     # Common Fields
     first_name = models.CharField(max_length=20, null=True, blank=True)
@@ -44,20 +42,28 @@ class Account(AbstractUser):
     phone_number = models.CharField(max_length=20, null=True, blank=True, default="")
     state = models.CharField(max_length=20, blank=True, null=True, default="")
     profile_picture = models.ImageField(upload_to="profile_images/", default="profile_images/default-profile-image.png", blank=True, null=True)
-    country = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
-    is_admin_user = models.BooleanField(default=False)
+    nationality = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
     password = models.CharField(max_length=30, null=False, blank=True, default="")
-    marital_status = models.CharField(max_length=30, null=False, blank=True, default="")
+    marital_status = models.CharField(max_length=20, null=False, blank=True, default="")
+    profile_url = models.CharField(max_length=30, null=True, blank=True)
+    otp_token = models.CharField(max_length=5, null=True, blank=True)
+
+    # Admin Fields
+    is_admin_user = models.BooleanField(default=False)
 
     # Student Fields
     matric_number = models.CharField(max_length=20, null=True, blank=True)
     level_year = models.CharField(max_length=20, null=True, blank=True)
+    current_semester = models.CharField(max_length=10, null=True, blank=True)
     current_cgpa = models.CharField(max_length=10, null=True, blank=True)
+    is_student = models.BooleanField(default=False)
+
 
     # Lecturer Fields
-    lecturer_title = models.CharField(max_length=20, null=True, blank=True)
+    is_lecturer = models.BooleanField(default=False)
+    lecturer_rank = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
-    active_status = models.BooleanField(default=False)
+    active_status = models.CharField(max_length=20, choices=Availability.choices, default=Availability.UNAVAILABLE, null=True, blank=True)
     
     username = models.CharField(max_length=20, null=True, blank=True)
     USERNAME_FIELD = "email"
@@ -70,3 +76,18 @@ class Account(AbstractUser):
     
     def user_full_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def save(self, *args, **kwargs):
+        if not self.profile_url:
+            self.profile_url = f"account/me/{self.id}"
+        return super().save(*args, **kwargs)
+    
+
+
+class SocialLink(models.Model):
+    user = models.ForeignKey(Account, related_name='social_links', on_delete=models.CASCADE)
+    platform = models.CharField(max_length=50)
+    url = models.URLField()
+    
+    def __str__(self):
+        return f'{self.platform}: {self.url}'
