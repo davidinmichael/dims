@@ -12,6 +12,8 @@ class CourseListCreate(APIView):
 
     def get(self, request):
         course = Courses.objects.all()
+        if not course.exists():
+            return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
         serializer = CourseSerializer(course, many=True)
         return Response(serializer.data)
 
@@ -30,7 +32,7 @@ class CourseDetail(APIView):
         try:
             return Courses.objects.get(pk=pk)
         except Courses.DoesNotExist:
-            raise Response(status=status.HTTP_404_NOT_FOUND)
+            raise Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
         
     def get(self, request, pk):
         course = self.get_object(pk)
