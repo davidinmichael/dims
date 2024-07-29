@@ -8,11 +8,11 @@ class Availability(models.TextChoices):
 
 
 class StudentLevel(models.TextChoices):
-    LEVEL_ONE = "level_one", _("Level One")
-    LEVEL_TWO = "level_two", _("Level Two")
-    LEVEL_THREE = "level_three", _("Level Three")
-    LEVEL_FOUR = "level_four", _("Level Four")
-    LEVEL_FIVE = "level_five", _("Level Five")
+    LEVEL_ONE = 1, _("Level One")
+    LEVEL_TWO = 2, _("Level Two")
+    LEVEL_THREE = 3, _("Level Three")
+    LEVEL_FOUR = 4, _("Level Four")
+    LEVEL_FIVE = 5, _("Level Five")
 
 
 
