@@ -16,6 +16,6 @@ class StudentLevel(models.IntegerChoices):
 
 
 
-class SchoolSemester(models.TextChoices):
-    FIRST_SEMESTER = "first_semester", _("First Semester")
-    SECOND_SEMESTER = "second_semester", _("Second Semester")
+class SchoolSemester(models.IntegerChoices):
+    FIRST_SEMESTER = 1, _("First Semester")
+    SECOND_SEMESTER = 2, _("Second Semester")
