@@ -11,7 +11,7 @@ class CourseListCreate(APIView):
     premission_classes = [CourseWriteOrRead]
 
     def get(self, request):
-        courses = Courses.objects.all()
+        courses = Courses.objects.all(user=request.user)
         if courses:
             serializer = CourseSerializer(courses, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
