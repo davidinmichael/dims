@@ -4,9 +4,8 @@ from account.models import Account
 
 
 class Notification(models.Model):
-    user = models.ForeignKey(Account, related_name="lecturer_courses", on_delete=models.SET_NULL, null=True, blank=True)
-    message = models.TextField
-    created_at = models.DateTimeField(auto_now=True)
+    message = models.CharField(max_length=300, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
