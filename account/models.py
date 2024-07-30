@@ -57,7 +57,7 @@ class Account(AbstractUser):
     # Student Fields
     matric_number = models.CharField(max_length=20, null=True, blank=True)
     level_year = models.IntegerField(choices=StudentLevel.choices, null=True, blank=True)
-    current_semester = models.CharField(max_length=10, null=True, blank=True)
+    current_semester = models.IntegerField(choices=SchoolSemester.choices, null=True, blank=True, default=SchoolSemester.FIRST_SEMESTER)
     current_cgpa = models.CharField(max_length=10, null=True, blank=True)
     is_student = models.BooleanField(default=True)
 
