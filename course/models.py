@@ -18,7 +18,7 @@ class Courses(models.Model):
     semester = models.IntegerField(choices=SchoolSemester.choices, null=True, blank=True, default=SchoolSemester.FIRST_SEMESTER)
     
     created_by = models.ForeignKey(Account, related_name="created_by_user", on_delete=models.SET_NULL, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     last_updated_by = models.ForeignKey(Account, related_name="updated_by_user", on_delete=models.SET_NULL, null=True, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -33,7 +33,7 @@ class OutstandingCourses(models.Model):
     courses = models.ManyToManyField(Courses, related_name="outstanding_courses")
    
     def __str__(self):
-        return self.user
+        return str(self.user)
     
     def count_courses(self):
         return self.courses.count()

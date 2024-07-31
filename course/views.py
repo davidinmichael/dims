@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework  import status
+
 from .serializers import CourseSerializer
 from .models import *
-from rest_framework  import status
 from .permissions import *
+from .utils import *
 
 
 
@@ -59,3 +61,11 @@ class CourseDetail(APIView):
             course.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+
+class CourseCounts(APIView):
+
+    def get(self, request):
+        user = request.user
+        course_count = total_and_semester_courses_count(user)
+        return Response(course_count, status.HTTP_200_OK)
