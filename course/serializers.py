@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Courses
+from .models import Courses, OutstandingCourses
 from account.serializers import *
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -22,6 +22,14 @@ class CourseSerializer(serializers.ModelSerializer):
             'last_updated_by',
             'last_updated',
         ]
+    
+
+class OutstandingCourseSerializer(serializers.ModelSerializer):
+    courses = CourseSerializer(many=True, required=False)
+
+    class Meta:
+        model = OutstandingCourses
+        fields = "__all__"
 
                 
         

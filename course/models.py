@@ -26,3 +26,14 @@ class Courses(models.Model):
 
     def __str__(self):
         return self.course_title
+    
+
+class OutstandingCourses(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE, null=True, blank=True)
+    courses = models.ManyToManyField(Courses, related_name="outstanding_courses")
+   
+    def __str__(self):
+        return self.user
+    
+    def count_courses(self):
+        return self.courses.count()
