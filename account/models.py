@@ -4,6 +4,7 @@ from rest_framework.response import Response
 
 from .choices import *
 from core.choices import *
+from course.models import OutstandingCourses
 
 
 class AccountManager(BaseUserManager):
@@ -83,7 +84,12 @@ class Account(AbstractUser):
     def save(self, *args, **kwargs):
         if not self.profile_url:
             self.profile_url = f"account/me/{self.id}"
-        return super().save(*args, **kwargs)
+
+        creating = not self.pk
+        super().save(*args, **kwargs)
+        
+        if creating:
+            OutstandingCourses.objects.create(user=self)
     
 
 
