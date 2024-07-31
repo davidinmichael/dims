@@ -87,8 +87,8 @@ class Account(AbstractUser):
 
         creating = not self.pk
         super().save(*args, **kwargs)
-        
-        if creating:
+
+        if creating and self.is_student:
             OutstandingCourses.objects.create(user=self)
     
 
