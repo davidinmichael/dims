@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.template.loader import render_to_string
 
 from .utils import *
@@ -95,3 +95,17 @@ class SetNewPassword(APIView):
             user.save()
             return Response({"message": "Password Updated Successfully"}, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        if user.is_admin_user:
+            serializer = AdminSerializer(user)
+        elif user.is_lecturer:
+            serializer = LecturerSerializer(user)
+        elif user.is_student:
+            serializer = StudentSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)

@@ -12,13 +12,6 @@ from .utils import *
 class CourseListCreate(APIView):
     premission_classes = [CourseWriteOrRead]
 
-    def get(self, request):
-        courses = Courses.objects.all()
-        if courses:
-            serializer = CourseSerializer(courses, many=True)
-            return Response(serializer.data, status.HTTP_200_OK)
-        return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
-
     def post(self, request):
         serializer = CourseSerializer(data=request.data)
         if serializer.is_valid():
@@ -26,7 +19,17 @@ class CourseListCreate(APIView):
             course_serializer = CourseSerializer(course)
             return Response(course_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+class CourseView(APIView):
+    premission_classes = [CourseWriteOrRead]
+
+    def get(self, request):
+        courses = Courses.objects.all(user=request.user)
+        if courses:
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CourseDetail(APIView):
