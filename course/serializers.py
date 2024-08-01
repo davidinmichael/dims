@@ -9,6 +9,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Courses
         fields = [
+            'id',
             'lecturer',
             'lecture_date',
             'lecture_time',
@@ -29,7 +30,9 @@ class OutstandingCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OutstandingCourses
-        fields = "__all__"
+        fields = ["courses"]
 
-                
-        
+
+class AddOutstanidngCourseSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
