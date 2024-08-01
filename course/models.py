@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from account.models import *
+from account.models import Account
 from core.choices import *
 
 
