@@ -1,16 +1,15 @@
 from rest_framework import serializers
-from .models import Notification
+from .models import Notification, IsReadNotification
 
-class NotificationSerializer(serializers.Serializer):
-    
 
+class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = [
-            "id",
-            "user",
-            "message",
-            "created_at",
-            "is_read",
-        ]
-        read_only_fields = ["id", "created_at"]
+        fields = "__all__"
+
+
+class IsReadNotificationSerializer(serializers.ModelSerializer):
+    notification = NotificationSerializer(required=True)
+    class Meta:
+        model = IsReadNotification
+        fields = ["id", "notification", "read_at"]

@@ -18,7 +18,7 @@ class CourseListCreate(APIView):
             return Response(course_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-   
+
 class CourseView(APIView):
     premission_classes = [CourseWriteOrRead]
 

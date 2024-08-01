@@ -102,5 +102,10 @@ class ProfileView(APIView):
 
     def get(self, request):
         user = request.user
-        serializer = AccountSerializer(user)
-        return Response(serializer.data)
+        if user.is_admin_user:
+            serializer = AdminSerializer(user)
+        elif user.is_lecturer:
+            serializer = LecturerSerializer(user)
+        elif user.is_student:
+            serializer = StudentSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
