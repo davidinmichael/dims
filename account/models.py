@@ -17,7 +17,8 @@ class AccountManager(BaseUserManager):
         user_permissions = extra_fields.pop('user_permissions', None)
 
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)
+        if password is not None:
+            user.set_password(password)
         user.save(using=self._db)
 
         if groups:
@@ -46,7 +47,6 @@ class Account(AbstractUser):
     state = models.CharField(max_length=20, blank=True, null=True, default="")
     profile_picture = models.ImageField(upload_to="profile_images/", default="profile_images/default-profile-image.png", blank=True, null=True)
     nationality = models.CharField(max_length=20, blank=True, null=True, default="Nigeria")
-    password = models.CharField(max_length=30, null=False, blank=True, default="")
     marital_status = models.CharField(max_length=20, null=False, blank=True, default="")
     profile_url = models.CharField(max_length=30, null=True, blank=True)
     otp_token = models.CharField(max_length=5, null=True, blank=True)
@@ -79,12 +79,6 @@ class Account(AbstractUser):
     
     def user_full_name(self):
         return f"{self.first_name} {self.last_name}"
-    
-    def save(self, *args, **kwargs):
-        if not self.profile_url:
-            self.profile_url = f"account/me/{self.id}"
-        return super().save(*args, **kwargs)
-    
 
 
 class SocialLink(models.Model):

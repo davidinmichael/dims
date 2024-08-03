@@ -7,4 +7,5 @@ urlpatterns = [
     path("login/", LoginView.as_view()),
     path("initiate-forgot-password/", InitiateForgotPassword.as_view()),
     path("set-new-password/", SetNewPassword.as_view()),
+    path("profile/", ProfileView.as_view()),
 ]

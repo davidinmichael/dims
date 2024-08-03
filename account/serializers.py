@@ -33,7 +33,7 @@ class AccountSerializer(serializers.ModelSerializer):
             "level_year",
             "current_semester",
             "current_cgpa",
-            "lecturer_title",
+            "lecturer_rank",
             "academic_role",
             "lecturer_availability",
             "is_admin_user",
