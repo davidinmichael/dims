@@ -9,7 +9,7 @@ from .models import Event
 class EventListCreatedView(APIView):
 
     def get(self, request):
-        events = Event.objects.all()
+        events = Event.objects.all().order_by("-created_at")
         if events:
             serializer = EventSerializer(events, many=True)
             return Response(serializer.data, status.HTTP_200_OK)

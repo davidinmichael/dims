@@ -163,3 +163,14 @@ class ProfileView(APIView):
             pass
 
         return Response({"message": "No Information on Account"}, status.HTTP_200_OK)
+
+
+class StudentInfo(APIView):
+
+    def get(self, request, pk):
+        try:
+            student = Student.objects.get(id=pk)
+        except Student.DoesNotExist:
+            return Response({"message": "No Student Found"}, status.HTTP_404_NOT_FOUND)
+        serializer = StudentSerializer(student)
+        return Response(serializer.data, status.HTTP_200_OK)

@@ -11,4 +11,5 @@ urlpatterns = [
     path("initiate-forgot-password/", InitiateForgotPassword.as_view()),
     path("set-new-password/", SetNewPassword.as_view()),
     path("profile/", ProfileView.as_view()),
+    path("student-info/<int:pk>/", StudentInfo.as_view()),
 ]
