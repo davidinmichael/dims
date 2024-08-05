@@ -7,12 +7,20 @@ from django.template.loader import render_to_string
 from .utils import *
 from .models import *
 from .serializers import *
+from .permissions import (
+    CreateAccountPerm
+)
 
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
+class DeleteUsers(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        users = Account.objects.all().delete()
+        return Response({"message": "Deleted"}, status.HTTP_200_OK)
 
 class CreateAccount(APIView):
     permission_classes = [AllowAny]
@@ -21,10 +29,44 @@ class CreateAccount(APIView):
         data = {}
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
-            user = serializer.save()
+            user = serializer.save(is_admin_user=True)
                 
             data["message"] = "Account created successfully"
             data["user_info"] = AccountSerializer(user).data
+            data["token"] = get_auth_token(user)
+            return Response(data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
+
+
+class CreateStudentAccount(APIView):
+    permission_classes = [CreateAccountPerm]
+
+    def post(self, request):
+        data = {}
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            user = serializer.save(is_student=True)
+                
+            data["message"] = "Account created successfully"
+            data["user_info"] = StudentSerializer(user).data
+            data["token"] = get_auth_token(user)
+            return Response(data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
+
+
+class CreateLecturerAccount(APIView):
+    permission_classes = [CreateAccountPerm]
+
+    def post(self, request):
+        data = {}
+        serializer = LecturerSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            user = serializer.save(is_lecturer=True)
+                
+            data["message"] = "Account created successfully"
+            data["user_info"] = LecturerSerializer(user).data
             data["token"] = get_auth_token(user)
             return Response(data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
