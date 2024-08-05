@@ -22,16 +22,19 @@ class EventListCreatedView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-# class EventDetailView(APIView):
-#     """
-#     API view to retrieve details of a specific event.
-#     """
-#     permission_classes = [IsAuthenticated]
+class EventDetailView(APIView):
+    """
+    API view to retrieve details of a specific event.
+    """
 
-#     def get(self, request, pk):
-#         event = get_object_or_404(Event, pk=pk, user=request.user)
-#         serializer = EventSerializer(event)
-#         return JsonResponse(serializer.data, safe=False)
+    def get(self, request, pk):
+        try:
+            event = Event.objects.get(id=pk)
+        except Event.DoesNotExist:
+            return Response({"message": "No event found"}, status.HTTP_404_NOT_FOUND)
+        serializer = EventSerializer(event)
+        return Response(serializer.data, status.HTTP_200_OK)
+    
 
 # class EventCreateView(LoginRequiredMixin, APIView):
 #     """
