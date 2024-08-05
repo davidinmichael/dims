@@ -1,3 +1,4 @@
+from functools import partial
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -35,21 +36,19 @@ class EventDetailView(APIView):
         serializer = EventSerializer(event)
         return Response(serializer.data, status.HTTP_200_OK)
     
-
-# class EventCreateView(LoginRequiredMixin, APIView):
-#     """
-#     API view to create a new event (requires login).
-#     """
-#     permission_classes = [IsAuthenticated, IsCustomAdminUser]
-
-#     def post(self, request):
-#         data = json.loads(request.body)
-#         data['user'] = request.user.id
-#         serializer = EventSerializer(data=data)
-#         if serializer.is_valid():
-#             event = serializer.save()
-#             return JsonResponse(serializer.data, status=201)
-#         return JsonResponse(serializer.errors, status=400)
+    def put(self, request, pk):
+        try:
+            event = Event.objects.get(id=pk)
+        except Event.DoesNotExist:
+            return Response({"message": "No event found"}, status.HTTP_404_NOT_FOUND)
+        serializer = EventSerializer(event, data=request.data, partial = True)
+        if serializer.is_valid(raise_exception=False):
+            serializer.save()
+            return Response({"message": "Event Updated"}, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            
+        
+    
 
 # class EventUpdateView(LoginRequiredMixin, APIView):
 #     """
