@@ -67,17 +67,22 @@ class CourseCounts(APIView):
 
     def get(self, request):
         user = request.user
-        course_count = total_and_semester_courses_count(user)
+        try:
+            student = Student.objects.get(user=user)
+        except Student.DoesNotExist:
+            return Response({"message": "No Course Count for Non-student Accounts"}, status.HTTP_200_OK)
+        course_count = total_and_semester_courses_count(student)
         return Response(course_count, status.HTTP_200_OK)
 
 
-class UserOwnCourses(APIView):
+class StudentCurrentSemesterCourses(APIView):
 
     def get(self, request):
         user = request.user
-        courses = Courses.objects.filter(level=user.level_year, semester=user.current_semester)
+        student = Student.objects.get(user=user)
+        courses = Courses.objects.filter(level=student.level_year, semester=student.current_semester)
         if courses:
-            serializer = CourseSerializer(courses, many=True)
+            serializer = CourseOutputSerializer(courses, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -86,7 +91,8 @@ class UserOutstandingCourse(APIView):
 
     def get(self, request):
         user = request.user
-        courses = OutstandingCourses.objects.get(user=user)
+        student = Student.objects.get(user=user)
+        courses = OutstandingCourses.objects.get(user=student)
         if courses:
             serializer = OutstandingCourseSerializer(courses)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -99,17 +105,17 @@ class AddOutstandingCourse(APIView):
         serializer = AddOutstanidngCourseSerializer(data=request.data)
         if serializer.is_valid():
             course_id = serializer.validated_data["course_id"]
-            user_id = serializer.validated_data["user_id"]
+            student_id = serializer.validated_data["student_id"]
             try:
                 course = Courses.objects.get(id=course_id)
             except Courses.DoesNotExist:
                 return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
             try:
-                user = Account.objects.get(id=user_id)
-            except Account.DoesNotExist:
+                student = Student.objects.get(id=student_id)
+            except Student.DoesNotExist:
                 return Response({"message": "User with this ID does not exist."}, status.HTTP_404_NOT_FOUND)
             
-            outstanding_course = OutstandingCourses.objects.get(user=user)
+            outstanding_course = OutstandingCourses.objects.get(user=student)
             outstanding_course.courses.add(course)
             return Response({"message": "Course added to Outstanding course."}, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

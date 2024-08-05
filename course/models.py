@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from account.models import Account, Lecturer
+from account.models import Account, Lecturer, Student
 from core.choices import *
 
 
@@ -27,11 +27,11 @@ class Courses(models.Model):
 
 
 class OutstandingCourses(models.Model):
-    user = models.OneToOneField(Account, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(Student, on_delete=models.CASCADE, null=True, blank=True)
     courses = models.ManyToManyField(Courses, related_name="outstanding_courses")
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user.matric_number)
     
     def count_courses(self):
         return self.courses.count()

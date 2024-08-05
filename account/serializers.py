@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from .models import *
+from course.models import OutstandingCourses
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
@@ -56,6 +57,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = [
+            "id",
             "user",
             "matric_number",
             "level_year",
@@ -71,6 +73,7 @@ class StudentSerializer(serializers.ModelSerializer):
         student = Student.objects.create(user=user, **validated_data)
         user.is_student = True
         user.save()
+        OutstandingCourses.objects.create(user=student)
 
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)

@@ -63,4 +63,4 @@ class OutstandingCourseSerializer(serializers.ModelSerializer):
 
 class AddOutstanidngCourseSerializer(serializers.Serializer):
     course_id = serializers.IntegerField()
-    user_id = serializers.IntegerField()
+    student_id = serializers.IntegerField()
