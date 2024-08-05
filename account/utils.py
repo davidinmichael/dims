@@ -2,6 +2,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
+from .models import *
+from .serializers import *
+
 import random
 import string
 
@@ -40,3 +43,20 @@ def send_email(user_email, subject, template):
         print("Email sending failed", {e})
         return "Couldn't connect, try again"
     return None
+
+
+def student_count():
+    level_1 = Student.objects.filter(level_year=1).count()
+    level_2 = Student.objects.filter(level_year=2).count()
+    level_3 = Student.objects.filter(level_year=3).count()
+    level_4 = Student.objects.filter(level_year=4).count()
+    level_5 = Student.objects.filter(level_year=5).count()
+
+    data = {
+        "level_1": level_1,
+        "level_2": level_2,
+        "level_3": level_3,
+        "level_4": level_4,
+        "level_5": level_5,
+    }
+    return data

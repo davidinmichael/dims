@@ -174,3 +174,10 @@ class StudentInfo(APIView):
             return Response({"message": "No Student Found"}, status.HTTP_404_NOT_FOUND)
         serializer = StudentSerializer(student)
         return Response(serializer.data, status.HTTP_200_OK)
+    
+
+class StudentCount(APIView):
+
+    def get(self, request):
+        count = student_count()
+        return Response(count, status.HTTP_200_OK)
