@@ -65,13 +65,13 @@ class StudentSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         social_links = validated_data.pop("social_links", [])
-        user_data = validated_data.pop("user", [])
+        user_data = validated_data.pop("user")
         user = Account.objects.create(**user_data)
         student = Student.objects.create(user=user, **validated_data)
 
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)
-        return user
+        return student
 
 
 # Lecturer Serializer
@@ -92,13 +92,13 @@ class LecturerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         social_links = validated_data.pop("social_links", [])
-        user_data = validated_data.pop("user", [])
+        user_data = validated_data.pop("user")
         user = Account.objects.create(**user_data)
         lecturer = Lecturer.objects.create(user=user, **validated_data)
 
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)
-        return user
+        return lecturer
 
 # Admin Serializer
 

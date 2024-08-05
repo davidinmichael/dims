@@ -5,4 +5,6 @@ class CreateAccountPerm(BasePermission):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
-        return request.user.is_admin_user or request.user.is_lecturer
+        if request.method == "POST":
+            return request.user.is_admin_user or request.user.is_lecturer
+        return False
