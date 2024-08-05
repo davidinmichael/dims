@@ -13,4 +13,5 @@ urlpatterns = [
     path("profile/", ProfileView.as_view()),
     path("student-info/<int:pk>/", StudentInfo.as_view()),
     path("student-count/", StudentCount.as_view()),
+    path("current-student/<int:pk>/", CurrentLevelStudents.as_view()),
 ]

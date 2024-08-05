@@ -181,3 +181,14 @@ class StudentCount(APIView):
     def get(self, request):
         count = student_count()
         return Response(count, status.HTTP_200_OK)
+
+
+class CurrentLevelStudents(APIView):
+
+    def get(self, request, pk):
+        students = Student.objects.filter(level_year=pk)
+        if students:
+            serializer = StudentSerializer(students, many=True)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response({"message": "No Students added yet."}, status.HTTP_200_OK)
+        
