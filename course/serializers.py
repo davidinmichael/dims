@@ -2,10 +2,13 @@ from rest_framework import serializers
 from .models import Courses, OutstandingCourses
 from account.serializers import *
 
+
 class CourseSerializer(serializers.ModelSerializer):
-    lecturer = LecturerSerializer(required=False)
-    last_updated_by = serializers.SlugRelatedField(slug_field="first_name", queryset=Account.objects.all(), required=False)
-    
+    created_by = serializers.SlugRelatedField(
+        slug_field="first_name", queryset=Account.objects.all(), required=False)
+    last_updated_by = serializers.SlugRelatedField(
+        slug_field="first_name", queryset=Account.objects.all(), required=False)
+
     class Meta:
         model = Courses
         fields = [
@@ -23,7 +26,32 @@ class CourseSerializer(serializers.ModelSerializer):
             'last_updated_by',
             'last_updated',
         ]
-    
+
+class CourseOutputSerializer(serializers.ModelSerializer):
+    lecturer = LecturerSerializer(required=False)
+    created_by = serializers.SlugRelatedField(
+        slug_field="first_name", queryset=Account.objects.all(), required=False)
+    last_updated_by = serializers.SlugRelatedField(
+        slug_field="first_name", queryset=Account.objects.all(), required=False)
+
+    class Meta:
+        model = Courses
+        fields = [
+            'id',
+            'lecturer',
+            'lecture_date',
+            'lecture_time',
+            'course_title',
+            'course_unit',
+            'course_code',
+            'level',
+            'semester',
+            'created_by',
+            'created_at',
+            'last_updated_by',
+            'last_updated',
+        ]
+
 
 class OutstandingCourseSerializer(serializers.ModelSerializer):
     courses = CourseSerializer(many=True, required=False)

@@ -28,8 +28,10 @@ class AccountSerializer(serializers.ModelSerializer):
             "nationality",
             "password",
             "marital_status",
-            "is_admin_user",
             "profile_url",
+            "is_admin_user",
+            "is_student",
+            "is_lecturer",
             "social_links",
         ]
 
@@ -55,7 +57,6 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = [
             "user",
-            "is_student",
             "matric_number",
             "level_year",
             "current_semester",
@@ -66,8 +67,10 @@ class StudentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         social_links = validated_data.pop("social_links", [])
         user_data = validated_data.pop("user")
-        user = Account.objects.create(**user_data)
+        user = Account.objects.create(is_student=True, **user_data)
         student = Student.objects.create(user=user, **validated_data)
+        user.is_student = True
+        user.save()
 
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)
@@ -82,8 +85,8 @@ class LecturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecturer
         fields = [
+            "id",
             "user",
-            "is_lecturer",
             "lecturer_rank",
             "academic_role",
             "lecturer_availability",
@@ -95,6 +98,8 @@ class LecturerSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop("user")
         user = Account.objects.create(**user_data)
         lecturer = Lecturer.objects.create(user=user, **validated_data)
+        user.is_lecturer = True
+        user.save()
 
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)

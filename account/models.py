@@ -60,6 +60,8 @@ class Account(AbstractUser):
 
     # Admin Fields
     is_admin_user = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
+    is_lecturer = models.BooleanField(default=False)
 
     username = models.CharField(max_length=20, null=True, blank=True)
     USERNAME_FIELD = "email"
@@ -83,24 +85,21 @@ class Student(models.Model):
     current_semester = models.IntegerField(
         choices=SchoolSemester.choices, null=True, blank=True, default=SchoolSemester.FIRST_SEMESTER)
     current_cgpa = models.CharField(max_length=10, null=True, blank=True)
-    is_student = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user.first_name} | {self.is_student}"
+        return f"{self.user.first_name} | {self.user.is_student}"
 
 
 class Lecturer(models.Model):
     user = models.OneToOneField(
         Account, on_delete=models.CASCADE)
-    is_lecturer = models.BooleanField(default=False)
     lecturer_rank = models.CharField(max_length=20, null=True, blank=True)
     academic_role = models.CharField(max_length=20, null=True, blank=True)
     lecturer_availability = models.CharField(
         max_length=20, choices=Availability.choices, default=Availability.AVAILABLE, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.first_name} | {self.is_lecturer}"
-
+        return f"{self.user.first_name} | {self.user.is_lecturer}"
 
 class SocialLink(models.Model):
     user = models.ForeignKey(

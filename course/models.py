@@ -1,12 +1,12 @@
 from django.db import models
 from django.utils import timezone
 
-from account.models import Account
+from account.models import Account, Lecturer
 from core.choices import *
 
 
 class Courses(models.Model):
-    lecturer = models.ForeignKey(Account, related_name="lecturer_courses", on_delete=models.SET_NULL, null=True, blank=True)
+    lecturer = models.ForeignKey(Lecturer, related_name="lecturer_courses", on_delete=models.SET_NULL, null=True, blank=True)
 
     lecture_date = models.DateField(null=True, blank=True) # "yyyy-mm-dd"
     lecture_time = models.TimeField(null=True, blank=True) # "HH:MM"

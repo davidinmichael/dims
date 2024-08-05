@@ -46,11 +46,10 @@ class CreateStudentAccount(APIView):
         data = {}
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
-            user = serializer.save(is_student=True)
+            user = serializer.save()
                 
             data["message"] = "Account created successfully"
             data["user_info"] = StudentSerializer(user).data
-            data["token"] = get_auth_token(user)
             return Response(data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
@@ -63,11 +62,10 @@ class CreateLecturerAccount(APIView):
         data = {}
         serializer = LecturerSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
-            user = serializer.save(is_lecturer=True)
+            user = serializer.save()
                 
             data["message"] = "Account created successfully"
             data["user_info"] = LecturerSerializer(user).data
-            data["token"] = get_auth_token(user)
             return Response(data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
@@ -148,8 +146,20 @@ class ProfileView(APIView):
         user = request.user
         if user.is_admin_user:
             serializer = AdminSerializer(user)
-        elif user.is_lecturer:
-            serializer = LecturerSerializer(user)
-        elif user.is_student:
-            serializer = StudentSerializer(user)
-        return Response(serializer.data, status.HTTP_200_OK)
+            return Response(serializer.data, status.HTTP_200_OK)
+        
+        try:
+            lecturer = Lecturer.objects.get(user=user)
+            serializer = LecturerSerializer(lecturer)
+            return Response(serializer.data, status.HTTP_200_OK)
+        except Lecturer.DoesNotExist:
+            pass
+
+        try:
+            student = Student.objects.get(user=user)
+            serializer = StudentSerializer(student)
+            return Response(serializer.data, status.HTTP_200_OK)
+        except Student.DoesNotExist:
+            pass
+
+        return Response({"message": "No Information on Account"}, status.HTTP_200_OK)

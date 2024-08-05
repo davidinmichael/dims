@@ -15,14 +15,14 @@ class CourseListCreate(APIView):
     def get(self, request):
         courses = Courses.objects.all()
         if courses:
-            serializer = CourseSerializer(courses, many=True)
+            serializer = CourseOutputSerializer(courses, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         serializer = CourseSerializer(data=request.data)
         if serializer.is_valid():
-            course = serializer.save(created_by=request.user)
+            course = serializer.save(created_by=request.user, last_updated_by=request.user)
             course_serializer = CourseSerializer(course)
             return Response(course_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -40,7 +40,7 @@ class CourseDetail(APIView):
     def get(self, request, pk):
         course = self.get_object(pk)
         if course:
-            serializer = CourseSerializer(course)
+            serializer = CourseOutputSerializer(course)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
