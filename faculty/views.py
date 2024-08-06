@@ -15,7 +15,7 @@ class FacultyView(APIView):
         if faculty:
             serializer = FacultySerializer(faculty, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
-        return Response({"message": "No courses available."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "No Department Added Yet."}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         serializer = FacultySerializer(data=request.data)
