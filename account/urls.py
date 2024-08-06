@@ -15,4 +15,6 @@ urlpatterns = [
     path("student-count/", StudentCount.as_view()),
     path("current-student/<int:pk>/", CurrentLevelStudents.as_view()),
     path("all-lecturers/", ListLecturers.as_view()),
+    path('social-links/', SocialLinkView.as_view()),
 ]
+

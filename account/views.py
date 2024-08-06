@@ -209,3 +209,15 @@ class ListLecturers(APIView):
         lecturers = Lecturer.objects.all()
         serializer = LecturerSerializer(lecturers, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
+
+
+
+class SocialLinkView(APIView):
+    def get(self, request):
+        user = request.user
+        try:
+            social_link = SocialLink.objects.filter(user=user)
+            serializer = SocialLinkSerializer(social_link, many=True)
+            return Response(serializer.data, status.HTTP_200_OK)
+        except:
+            return Response({"message": "No Social Link found."}, status.HTTP_200_OK)
