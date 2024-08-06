@@ -12,5 +12,5 @@ class FacultySerializer(serializers.ModelSerializer):
             "image",
             "other_titles",
             "rep_name",
-            "rep_degree"
+            "rep_role"
         ]
