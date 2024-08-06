@@ -165,15 +165,25 @@ class ProfileView(APIView):
         return Response({"message": "No Information on Account"}, status.HTTP_200_OK)
 
 
-class StudentInfo(APIView):
+class UserAccountInfo(APIView):
 
     def get(self, request, pk):
+        user = Account.objects.get(id=pk)
         try:
-            student = Student.objects.get(id=pk)
+            student = Student.objects.get(user=user)
+            serializer = StudentSerializer(student)
+            return Response(serializer.data, status.HTTP_200_OK)
         except Student.DoesNotExist:
-            return Response({"message": "No Student Found"}, status.HTTP_404_NOT_FOUND)
-        serializer = StudentSerializer(student)
-        return Response(serializer.data, status.HTTP_200_OK)
+            pass
+
+        try:
+            lecturer = Lecturer.objects.get(user=user)
+            serializer = LecturerSerializer(lecturer)
+            return Response(serializer.data, status.HTTP_200_OK)
+        except Lecturer.DoesNotExist:
+            pass
+
+        return Response({"message": "No User Found"}, status.HTTP_404_NOT_FOUND)
     
 
 class StudentCount(APIView):
@@ -191,4 +201,11 @@ class CurrentLevelStudents(APIView):
             serializer = StudentSerializer(students, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response({"message": "No Students added yet."}, status.HTTP_200_OK)
-        
+
+
+class ListLecturers(APIView):
+
+    def get(self, request):
+        lecturers = Lecturer.objects.all()
+        serializer = LecturerSerializer(lecturers, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
