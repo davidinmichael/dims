@@ -119,3 +119,12 @@ class AddOutstandingCourse(APIView):
             outstanding_course.courses.add(course)
             return Response({"message": "Course added to Outstanding course."}, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class CoursesByLevelAndSemester(APIView):
+    def get(self, request, level, semester):
+        courses = Courses.objects.filter(level=level, semester=semester)
+        if courses.exists():
+            serializer = CourseOutputSerializer(courses, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"message": "No courses found for this level and semester."}, status=status.HTTP_404_NOT_FOUND)
