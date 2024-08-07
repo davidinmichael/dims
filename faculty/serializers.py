@@ -15,4 +15,5 @@ class FacultySerializer(serializers.ModelSerializer):
             "middle_name",
             "rep_image",
             "academic_position",
+            "date_posted"
         ]

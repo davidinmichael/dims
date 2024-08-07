@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from account.models import Lecturer
 
@@ -14,3 +15,4 @@ class Faculty(models.Model):
     rep_image = models.ImageField(upload_to= 'rep_images/', blank=True, null=True)
     rank = models.CharField(blank=True, null=True, max_length=25)
     academic_position = models.CharField(blank=True, null=True, max_length=20)
+    date_posted = models.DateField(default=datetime.date.today())

@@ -47,7 +47,7 @@ class FacultyDetail(APIView):
         if faculty:
             serializer = FacultySerializer(faculty, data=request.data, partial=True)
             if serializer.is_valid():
-                serializer.save(last_updated_by=request.user)
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message": "Department not found."}, status=status.HTTP_404_NOT_FOUND)
