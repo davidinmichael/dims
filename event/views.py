@@ -2,11 +2,13 @@ from functools import partial
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 from .serializers import *
 from .models import Event
 
 class EventListCreatedView(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
         events = Event.objects.all().order_by("-created_at")
