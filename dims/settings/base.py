@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "course",
     "event",
     "core",
+    "faculty",
 ]
 
 MIDDLEWARE = [

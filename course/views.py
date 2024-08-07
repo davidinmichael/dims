@@ -9,6 +9,7 @@ from .permissions import *
 from .utils import *
 
 
+
 class CourseListCreate(APIView):
     premission_classes = [CourseWriteOrRead]
 
