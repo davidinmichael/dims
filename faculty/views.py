@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from course.permissions import CourseWriteOrRead
 from rest_framework  import status
 from .models import Faculty
 from .serializers import FacultySerializer
@@ -8,7 +7,6 @@ from .serializers import FacultySerializer
 # Create your views here.
 
 class FacultyView(APIView):
-    premission_classes = [CourseWriteOrRead]
 
     def get(self, request):
         faculty = Faculty.objects.all()
@@ -27,7 +25,6 @@ class FacultyView(APIView):
 
 
 class FacultyDetail(APIView):
-    permission_classes = [CourseWriteOrRead]
 
     def get_object(self, pk):
         try:
