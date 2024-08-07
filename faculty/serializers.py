@@ -7,10 +7,12 @@ class FacultySerializer(serializers.ModelSerializer):
         model = Faculty
         fields = [
             "id",
-            "name",
-            "description",
+            "dept_name",
+            "dept_description",
             "image",
-            "other_titles",
-            "rep_name",
-            "rep_role"
+            "first_name",
+            "last_name",
+            "middle_name",
+            "rep_image",
+            "academic_position",
         ]
