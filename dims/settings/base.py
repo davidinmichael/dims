@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "faculty",
     "cloudinary",
     "cloudinary_storage",
+    "result",
 ]
 
 MIDDLEWARE = [
