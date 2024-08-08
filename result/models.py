@@ -5,10 +5,12 @@ from core.choices import *
 
 
 
+
 class Course(models.Model):
     course_title = models.CharField(max_length=50, null=True, blank=True)
     course_unit = models.CharField(max_length=20, null=True, blank=True)
     course_code = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    score = models.DecimalField(max_digits=5, decimal_places=2)
     lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, related_name="courses")
 
     def __str__(self):
@@ -19,8 +21,6 @@ class Course(models.Model):
 class Result(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name="results")
     course = models.ManyToManyField(Course, related_name="results")
-    score = models.DecimalField(max_digits=5, decimal_places=2)
-    grade = models.CharField(max_length=2)
     year = models.IntegerField(choices=StudentLevel.choices, null=True, blank=True, default=StudentLevel.LEVEL_ONE)
     semester = models.IntegerField(choices=SchoolSemester.choices, null=True, blank=True, default=SchoolSemester.FIRST_SEMESTER)
 
