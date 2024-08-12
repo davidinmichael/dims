@@ -9,13 +9,8 @@ from core.choices import *
 
 
 class Result(models.Model):
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name="results")
-    course = models.ForeignKey(Courses, related_name="results")
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, null=True, blank=True, related_name="results")
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, null=True, blank=True, related_name="results")
     score = models.PositiveIntegerField(null=True, blank=True)
     def __str__(self):
         return f"{self.student} - {self.course}"
-
-
-
-
-
