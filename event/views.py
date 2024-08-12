@@ -20,7 +20,7 @@ class EventListCreatedView(APIView):
     def post(self, request):
         serializer = EventSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
-            serializer.save(created_by=request.user)
+            serializer.save()
             return Response({"message": "Event Created."}, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

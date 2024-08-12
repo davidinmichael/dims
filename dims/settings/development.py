@@ -19,6 +19,7 @@ CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("Pro_CLOUD_NAME"),
     "API_KEY": os.getenv("Pro_API_KEY"),
     "API_SECRET": os.getenv("Pro_API_SECRET"),
+    "FOLDER": "dims_media",
 }
 
 DEFAULT_FILE_STORAGE = os.getenv("DEFAULT_FILE_STORAGE")

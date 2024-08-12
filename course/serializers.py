@@ -4,10 +4,10 @@ from account.serializers import *
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    created_by = serializers.SlugRelatedField(
-        slug_field="first_name", queryset=Account.objects.all(), required=False)
-    last_updated_by = serializers.SlugRelatedField(
-        slug_field="first_name", queryset=Account.objects.all(), required=False)
+    # created_by = serializers.SlugRelatedField(
+    #     slug_field="first_name", queryset=Account.objects.all(), required=False)
+    # last_updated_by = serializers.SlugRelatedField(
+    #     slug_field="first_name", queryset=Account.objects.all(), required=False)
 
     class Meta:
         model = Courses
