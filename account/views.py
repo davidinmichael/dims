@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.template.loader import render_to_string
+from rest_framework import generics
+
 
 from .utils import *
 from .models import *
@@ -221,3 +223,14 @@ class SocialLinkView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         except:
             return Response({"message": "No Social Link found."}, status.HTTP_200_OK)
+        
+        
+
+
+class UpdateAccountView(generics.UpdateAPIView):
+    serializer_class = UpdateAccountSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        # Get the current authenticated user
+        return self.request.user

@@ -152,3 +152,39 @@ class SetNewPasswordSerializer(serializers.Serializer):
         if data["password"] != data["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match")
         return data
+
+
+
+class UpdateAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = [
+            'first_name', 
+            'last_name', 
+            'middle_name', 
+            'phone_number', 
+            "profile_picture",
+            'email', 
+            'state',
+            'gender',
+            'date_of_birth',
+            'nationality',
+            'religion'
+        ]
+
+    def validate(self, data):
+        # List of fields that should not be updated
+        restricted_fields = [
+            'email',
+            'state',
+            'gender',
+            'date_of_birth',
+            'nationality'
+        ]
+        
+        # Check if any restricted field is being updated
+        for field in restricted_fields:
+            if field in data:
+                raise serializers.ValidationError(f"{field.replace('_', ' ').title()} cannot be updated.")
+
+        return data
