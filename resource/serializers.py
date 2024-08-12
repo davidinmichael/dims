@@ -20,3 +20,25 @@ class ResourceOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resource
         fields = "__all__"
+
+
+class ResourceGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resource
+        fields = ['id', 'resource', 'added_by']
+
+
+class ResourceCourseSerializer(serializers.ModelSerializer):
+    resources = ResourceGetSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Courses
+        fields = [
+            'id',
+            'course_title',
+            # 'course_unit',
+            # 'course_code',
+            # 'level',
+            # 'semester',
+            'resources',
+        ]

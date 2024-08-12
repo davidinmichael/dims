@@ -4,6 +4,7 @@ from rest_framework  import status
 
 from .serializers import *
 from .models import *
+from course.models import Courses
 
 
 class ResourceView(APIView):
@@ -24,3 +25,9 @@ class ResourceView(APIView):
         serializer = ResourceOutputSerializer(resources, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
+
+class CourseResourceView(APIView):
+    def get(self, request):
+        courses = Courses.objects.all()
+        serializer = ResourceCourseSerializer(courses, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
