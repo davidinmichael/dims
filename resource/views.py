@@ -18,4 +18,9 @@ class ResourceView(APIView):
                 return Response(resource_serializer.data, status.HTTP_201_CREATED)
             return Response({"message": "You do not have permissions to add a Resource."}, status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request):
+        resources = Resource.objects.all()
+        serializer = ResourceOutputSerializer(resources, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
 
