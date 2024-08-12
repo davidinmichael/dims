@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     "event",
     "core",
     "faculty",
-    "result",
+    "resource",
     "cloudinary",
     "cloudinary_storage",
 ]

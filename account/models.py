@@ -59,7 +59,7 @@ class Account(AbstractUser):
     otp_token = models.CharField(max_length=5, null=True, blank=True)
 
     # Admin Fields
-    is_admin_user = models.BooleanField(default=False)
+    is_admin_user = models.BooleanField(default=True)
     is_student = models.BooleanField(default=False)
     is_lecturer = models.BooleanField(default=False)
 
@@ -74,6 +74,9 @@ class Account(AbstractUser):
 
     def user_full_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def is_admin_or_lecturer(self):
+        return any([self.is_admin_user, self.is_lecturer])
 
 
 class Student(models.Model):
