@@ -1,20 +1,10 @@
 from django.db import models
 from account.models import Lecturer, Student
+from course.models import Course
 from core.choices import *
 # Create your models here.
 
 
-
-
-class Course(models.Model):
-    course_title = models.CharField(max_length=50, null=True, blank=True)
-    course_unit = models.CharField(max_length=20, null=True, blank=True)
-    course_code = models.CharField(max_length=20, null=True, blank=True, unique=True)
-    score = models.DecimalField(max_digits=5, decimal_places=2)
-    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE, related_name="courses")
-
-    def __str__(self):
-        return f"{self.code} - {self.title}"
 
 
 
@@ -29,13 +19,6 @@ class Result(models.Model):
 
 
 
-class OutstandingCourse(models.Model):
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, null=True, blank=True)
-    course = models.ManyToManyField(Course, related_name="outstanding_courses")
-
-
-    def __str__(self):
-        return f"{self.student} - {self.course}"
 
 class CGPA(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name="cgpa")
