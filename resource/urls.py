@@ -4,5 +4,5 @@ from .views import *
 
 urlpatterns = [
     path("add-resource/", ResourceView.as_view()),
-    path('courses-with-resources/', CourseResourceView.as_view(), name='courses_with_resources'),
+    path('courses-with-resources/', CourseResourceView.as_view()),
 ]
