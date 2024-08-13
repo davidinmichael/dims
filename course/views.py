@@ -87,6 +87,7 @@ class StudentCurrentSemesterCourses(APIView):
         return Response({"message": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
+
 class UserOutstandingCourse(APIView):
 
     def get(self, request):
