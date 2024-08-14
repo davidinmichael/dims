@@ -47,6 +47,28 @@ class AccountSerializer(serializers.ModelSerializer):
         for social_link in social_links:
             SocialLink.objects.create(user=user, **social_link)
         return user
+    
+    def update(self, instance, validated_data):
+        restricted_fields = [
+            'email',
+            'state',
+            'gender',
+            'date_of_birth',
+            'nationality'
+        ]
+        
+        # Check if any restricted field is being updated
+        for field in restricted_fields:
+            if field in validated_data:
+                raise serializers.ValidationError(f"{field.replace('_', ' ').title()} cannot be updated.")
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        return instance
+    
 
 
 # Student Serializer
@@ -151,40 +173,4 @@ class SetNewPasswordSerializer(serializers.Serializer):
     def validate(self, data):
         if data["password"] != data["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match")
-        return data
-
-
-
-class UpdateAccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = [
-            'first_name', 
-            'last_name', 
-            'middle_name', 
-            'phone_number', 
-            "profile_picture",
-            'email', 
-            'state',
-            'gender',
-            'date_of_birth',
-            'nationality',
-            'religion'
-        ]
-
-    def validate(self, data):
-        # List of fields that should not be updated
-        restricted_fields = [
-            'email',
-            'state',
-            'gender',
-            'date_of_birth',
-            'nationality'
-        ]
-        
-        # Check if any restricted field is being updated
-        for field in restricted_fields:
-            if field in data:
-                raise serializers.ValidationError(f"{field.replace('_', ' ').title()} cannot be updated.")
-
         return data
