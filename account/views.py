@@ -40,34 +40,38 @@ class CreateAccount(APIView):
 
 
 class CreateStudentAccount(APIView):
-    permission_classes = [CreateAccountPerm]
 
     def post(self, request):
+        user = request.user
         data = {}
-        serializer = StudentSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=False):
-            user = serializer.save()
-                
-            data["message"] = "Account created successfully"
-            data["user_info"] = StudentSerializer(user).data
-            return Response(data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        if user.is_admin_or_lecturer():
+            serializer = StudentSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                user = serializer.save()
+                    
+                data["message"] = "Account created successfully"
+                data["user_info"] = StudentSerializer(user).data
+                return Response(data, status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "You do not have the permission to create this user."}, status.HTTP_401_UNAUTHORIZED)
         # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
 
 
 class CreateLecturerAccount(APIView):
-    permission_classes = [CreateAccountPerm]
 
     def post(self, request):
+        user = request.user
         data = {}
-        serializer = LecturerSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=False):
-            user = serializer.save()
-                
-            data["message"] = "Account created successfully"
-            data["user_info"] = LecturerSerializer(user).data
-            return Response(data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        if user.is_admin_or_lecturer():
+            serializer = LecturerSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                user = serializer.save()
+                    
+                data["message"] = "Account created successfully"
+                data["user_info"] = LecturerSerializer(user).data
+                return Response(data, status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "You do not have the permission to create this user."}, status.HTTP_401_UNAUTHORIZED)
         # return Response({"message": "Incomplete Fields."}, status.HTTP_400_BAD_REQUEST)
 
 

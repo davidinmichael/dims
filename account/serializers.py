@@ -71,8 +71,6 @@ class StudentSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop("user")
         user = Account.objects.create(is_student=True, **user_data)
         student = Student.objects.create(user=user, **validated_data)
-        user.is_student = True
-        user.save()
         OutstandingCourses.objects.create(user=student)
 
         for social_link in social_links:

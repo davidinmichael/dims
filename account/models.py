@@ -59,7 +59,7 @@ class Account(AbstractUser):
     otp_token = models.CharField(max_length=5, null=True, blank=True)
 
     # Admin Fields
-    is_admin_user = models.BooleanField(default=True)
+    is_admin_user = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     is_lecturer = models.BooleanField(default=False)
 

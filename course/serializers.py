@@ -51,6 +51,17 @@ class CourseOutputSerializer(serializers.ModelSerializer):
             'last_updated_by',
             'last_updated',
         ]
+    
+    def validate(self, data):
+        lecturer = data["lecturer"]
+        if "admin" not in lecturer:
+            return "Invalid data sent"
+        return data
+    
+    def validate_level(self, value):
+        if value == 1:
+            return "Can't join event"
+        
 
 
 class OutstandingCourseSerializer(serializers.ModelSerializer):
