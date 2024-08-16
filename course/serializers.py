@@ -27,6 +27,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'last_updated',
         ]
 
+
 class CourseOutputSerializer(serializers.ModelSerializer):
     lecturer = LecturerSerializer(required=False)
     created_by = serializers.SlugRelatedField(
