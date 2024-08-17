@@ -9,7 +9,7 @@ from account.models import Student
 
 class ResultSerializer(serializers.ModelSerializer):
     student = serializers.SlugRelatedField(
-        queryset=Student.object.all(),
+        queryset=Student.objects.all(),
         slug_field='matric_number',
     )
 
