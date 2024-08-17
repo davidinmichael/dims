@@ -1,20 +1,31 @@
 from rest_framework import serializers
+
+from course.models import OutstandingCourses
+from course.serializers import CourseSerializer
 from .models import *
+from account.models import Student
 
 
 
 class ResultSerializer(serializers.ModelSerializer):
-    matric_number = serializers.SlugRelatedField(
-        source='student',
+    student = serializers.SlugRelatedField(
+        queryset=Student.object.all(),
         slug_field='matric_number',
     )
 
     class Meta:
         model = Result
-        fields = "__all__" 
+        fields = "__all__"
 
 
-class ResultOutputSerializer(serializers.ModelSerializer):
+class OutstandingCourseSerializer(serializers.ModelSerializer):
+    courses = CourseSerializer(many=True, required=False)
+
     class Meta:
-        model = Result
-        fields = ["student_id", "course_id", "grade", "semester"]
+        model = OutstandingCourses
+        fields = ["courses"]
+
+
+class AddOutstanidngCourseSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField()
+    student_id = serializers.IntegerField()
