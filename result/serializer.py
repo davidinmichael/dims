@@ -12,6 +12,10 @@ class ResultSerializer(serializers.ModelSerializer):
         queryset=Student.objects.all(),
         slug_field='matric_number',
     )
+    course = serializers.SlugRelatedField(
+        queryset=Courses.objects.all(),
+        slug_field='course_code',
+    )
 
     class Meta:
         model = Result
