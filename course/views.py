@@ -100,6 +100,7 @@ class UserOutstandingCourse(APIView):
 
 
 class AddOutstandingCourse(APIView):
+    permission_classes = [CourseWriteOrRead]
 
     def post(self, request):
         serializer = AddOutstanidngCourseSerializer(data=request.data)
