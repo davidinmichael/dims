@@ -20,16 +20,3 @@ class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
         fields = "__all__"
-
-
-class OutstandingCourseSerializer(serializers.ModelSerializer):
-    courses = CourseSerializer(many=True, required=False)
-
-    class Meta:
-        model = OutstandingCourses
-        fields = ["courses"]
-
-
-class AddOutstanidngCourseSerializer(serializers.Serializer):
-    course_id = serializers.IntegerField()
-    student_id = serializers.IntegerField()
