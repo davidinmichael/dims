@@ -11,7 +11,7 @@ class Result(APIView):
 
     def get(self, request):
         user = request.user
-        result = Result.objects.get(user=user)
+        result = Result.objects.filter(student=user)
         if result:
             serializer = ResultSerializer(result, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
