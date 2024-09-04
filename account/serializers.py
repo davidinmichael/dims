@@ -138,6 +138,7 @@ class AdminSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
+    matric_number = serializers.CharField()
     password = serializers.CharField()
 
 
