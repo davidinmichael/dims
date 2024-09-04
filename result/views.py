@@ -7,7 +7,7 @@ from .serializer import *
 # Create your views here.
 
 
-class Result(APIView):
+class Results(APIView):
 
     def get(self, request):
         user = request.user
