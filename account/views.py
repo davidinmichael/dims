@@ -82,18 +82,23 @@ class LoginView(APIView):
         data = {}
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            email = serializer.validated_data["email"]
-            matric_number = serializer.validated_data["matric_number"]
-            password = serializer.validated_data["password"]
+            email = serializer.validated_data.get("email")
+            matric_number = serializer.validated_data.get("matric_number")
+            password = serializer.validated_data.get("password")
             
             try:
                 if email:
                     user = Account.objects.get(email=email)
-                if matric_number:
-                    user = Student.objects.get(matric_number=matric_number)
-            except Account.DoesNotExist or Student.DoesNotExist:
-                return Response({"message": "User with this email doesn't exist."}, status.HTTP_400_BAD_REQUEST)
-            
+                elif matric_number:
+                    student = Student.objects.get(matric_number=matric_number)
+                    user = student.account
+                else:
+                    return Response({"message": "Email or Matric Number required."}, status=status.HTTP_400_BAD_REQUEST)
+            except Account.DoesNotExist:
+                return Response({"message": "User with this email doesn't exist."}, status=status.HTTP_400_BAD_REQUEST)
+            except Student.DoesNotExist:
+                return Response({"message": "Student with this matric number doesn't exist."}, status=status.HTTP_400_BAD_REQUEST)
+
             # if user.check_password(password):
             if user.password == password:
                 data["message"] = "Login successfully"
