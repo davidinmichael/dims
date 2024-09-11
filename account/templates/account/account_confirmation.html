@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Password Reset</title>
+        <title>Account Confirmation</title>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <style>
             html {
@@ -39,6 +39,14 @@
                 row-gap: 5%;
             }
 
+            .buttonCtn {
+                width: 90%;
+                height: 6%;
+                display: flex;
+                justify-content: center;
+                margin-left: -1%;
+            }
+
             .header {
                 font-size: larger;
                 font-weight: 700;
@@ -57,21 +65,31 @@
                 font-size: medium;
                 font-weight: 600;
                 text-decoration: none;
-                color: #6C009F;
+                color: #fff;
+                background-color: #00659F;
+                padding-top: 1%;
+                padding-bottom: 1%;
+                padding-left: 4%;
+                padding-right: 4%;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
             }
 
         </style>
     </head>
     <body>
-        <p class="header"><span>ITDIMS </span>Account Recovery</p>
+        <p class="header"><span>ITDIMS </span>{{user_instance}} Confirmation</p>
         <div class="ctn">
             <div class="content">
-                <p class="greeting">Hi, <span>{{ name }}</span></p>
+                <p class="greeting">Hi, <span>{{name}}</span></p>
                 <div class="msgContent">
                     <p class="message">Your account password will be reset,</p>
                     <p class="message">Kindly click on the link below to continue the reset process.</p>
                 </div>
-                <a class="resetLink" href="{{ reset_link }}">RESET</a>
+                <div class="buttonCtn">
+                    <a class="resetLink" href="{{reset_link}}">Confirm</a>
+                </div>
                 <div class="closeContent">
                     <p class="closing">Thanks</p>
                     <p class="closing">The ITDIMS Team</p>

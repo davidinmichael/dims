@@ -26,10 +26,23 @@ class CreateAccount(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        frontend_url = os.getenv("FRONTEND_BASE_URL")
         data = {}
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             user = serializer.save(is_admin_user=True)
+
+            user.otp_token = generate_verification_token()
+            user.save()
+
+            context = {
+                "name": user.first_name,
+                "reset_link": f"{frontend_url}/account/{user.otp_token}/",
+                "user_instance": "Admin",
+                }
+            
+            template = render_to_string("account/account_confirmation.html", context)
+            send_email(user.email, "ITDIMS: Admin Account Confirmation", template)
                 
             data["message"] = "Account created successfully"
             data["user_info"] = AccountSerializer(user).data
@@ -43,11 +56,24 @@ class CreateStudentAccount(APIView):
 
     def post(self, request):
         user = request.user
+        frontend_url = os.getenv("FRONTEND_BASE_URL")
         data = {}
         if user.is_admin_or_lecturer():
             serializer = StudentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 user = serializer.save()
+
+                user.otp_token = generate_verification_token()
+                user.save()
+
+                context = {
+                    "name": user.first_name,
+                    "reset_link": f"{frontend_url}/account/{user.otp_token}/",
+                    "user_instance": "Student",
+                    }
+                
+                template = render_to_string("account/account_confirmation.html", context)
+                send_email(user.email, "ITDIMS: Student Account Confirmation", template)
                     
                 data["message"] = "Account created successfully"
                 data["user_info"] = StudentSerializer(user).data
@@ -61,11 +87,24 @@ class CreateLecturerAccount(APIView):
 
     def post(self, request):
         user = request.user
+        frontend_url = os.getenv("FRONTEND_BASE_URL")
         data = {}
         if user.is_admin_or_lecturer():
             serializer = LecturerSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 user = serializer.save()
+
+                user.otp_token = generate_verification_token()
+                user.save()
+
+                context = {
+                    "name": user.first_name,
+                    "reset_link": f"{frontend_url}/account/{user.otp_token}/",
+                    "user_instance": "Lecturer",
+                    }
+                
+                template = render_to_string("account/account_confirmation.html", context)
+                send_email(user.email, "ITDIMS: Lecturer Account Confirmation", template)
                     
                 data["message"] = "Account created successfully"
                 data["user_info"] = LecturerSerializer(user).data
@@ -131,7 +170,7 @@ class InitiateForgotPassword(APIView):
             "reset_link": f"{frontend_url}/account/{user.otp_token}/"
         }
         template = render_to_string("account/initiate_forgot_password.html", context)
-        send_email(email, "DIMS: Password Reset", template)
+        send_email(email, "ITDIMS: Password Reset", template)
         return Response({"message": "A link has been sent to your email."}, status.HTTP_200_OK)
             
 
