@@ -245,7 +245,7 @@ class ProfileView(APIView):
         except Student.DoesNotExist:
             pass
 
-        return Response({"message": "No Information on Account"}, status.HTTP_200_OK)
+        return Response({"message": "No Information on Account"}, status.HTTP_400_NOT_FOUND)
 
 
 class UserAccountInfo(APIView):
